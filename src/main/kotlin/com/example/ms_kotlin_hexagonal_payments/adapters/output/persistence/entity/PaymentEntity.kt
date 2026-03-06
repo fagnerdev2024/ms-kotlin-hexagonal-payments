@@ -27,5 +27,11 @@ class PaymentEntity(
     var status: PaymentStatus,
 
     @Column(nullable = false)
-    var createdAt: Instant
+    var createdAt: Instant,
+
+    @Column(nullable = true)
+    var authorizationCode: String? = null,
+
+    @Column(nullable = true)
+    var declineReason: String? = null,
 )

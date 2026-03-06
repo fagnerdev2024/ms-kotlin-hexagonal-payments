@@ -12,7 +12,9 @@ object PaymentMapper {
         amount = domain.amount.amount,
         currency = domain.amount.currency,
         status = domain.status,
-        createdAt = domain.createdAt
+        createdAt = domain.createdAt,
+        authorizationCode = domain.authorizationCode,
+        declineReason = domain.declineReason
     )
 
     fun toDomain(entity: PaymentEntity) = Payment(
@@ -20,6 +22,8 @@ object PaymentMapper {
         clientId = entity.clientId,
         amount = Money(entity.amount, entity.currency),
         status = entity.status,
-        createdAt = entity.createdAt
+        createdAt = entity.createdAt,
+        authorizationCode = entity.authorizationCode,
+        declineReason = entity.declineReason
     )
 }

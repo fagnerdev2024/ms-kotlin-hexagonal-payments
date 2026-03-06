@@ -1,17 +1,21 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.controller
 
 
+import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.AuthorizePaymentResponse
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.CreatePaymentRequest
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.PaymentResponse
+import com.example.ms_kotlin_hexagonal_payments.application.port.input.AuthorizePaymentUseCase
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.CreatePaymentUseCase
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/v1/payments")
 class PaymentController(
-    private val createPaymentUseCase: CreatePaymentUseCase
+    private val createPaymentUseCase: CreatePaymentUseCase,
+    private val authorizePaymentUseCase: AuthorizePaymentUseCase
 ) {
 
     @PostMapping
@@ -25,6 +29,18 @@ class PaymentController(
             currency = payment.amount.currency,
             status = payment.status,
             createdAt = payment.createdAt
+        )
+    }
+
+    @PostMapping("/{id}/authorize")
+    fun authorize(@PathVariable id: UUID): AuthorizePaymentResponse {
+        val updated = authorizePaymentUseCase.authorize(id)
+
+        return AuthorizePaymentResponse(
+            id = updated.id,
+            status = updated.status,
+            authorizationCode = updated.authorizationCode,
+            declineReason = updated.declineReason
         )
     }
 }
