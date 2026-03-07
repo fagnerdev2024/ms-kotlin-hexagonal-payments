@@ -1,7 +1,8 @@
 package com.example.ms_kotlin_hexagonal_payments.domain.model
 
-import com.example.ms_kotlin_hexagonal_payments.domain.exception.BusinessException
 import com.example.ms_kotlin_hexagonal_payments.domain.exception.BusinessRuleException
+import com.example.ms_kotlin_hexagonal_payments.domain.exception.PaymentNotApprovedForRefundException
+import com.example.ms_kotlin_hexagonal_payments.domain.exception.RefundAmountGreaterThanPaymentException
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID
@@ -18,7 +19,9 @@ data class Payment(
 
     fun authorize(result: AuthorizationResult): Payment {
         if (status != PaymentStatus.CREATED) {
-            throw BusinessRuleException("Payment $id cannot be authorized because status is $status")
+            throw BusinessRuleException(
+                "Payment $id cannot be authorized because status is $status"
+            )
         }
 
         return when (result.status) {
@@ -27,30 +30,46 @@ data class Payment(
                 authorizationCode = result.authorizationCode,
                 declineReason = null
             )
+
             PaymentStatus.DECLINED -> copy(
                 status = PaymentStatus.DECLINED,
                 declineReason = result.declineReason ?: "DECLINED",
                 authorizationCode = null
             )
-            else -> throw BusinessRuleException("Invalid authorization result status: ${result.status}")
+
+            else -> throw BusinessRuleException(
+                "Invalid authorization result status: ${result.status}"
+            )
         }
     }
 
     fun validateRefundEligibility(refundAmount: BigDecimal) {
+
+        // REGRA 1
         if (status != PaymentStatus.APPROVED) {
-            throw BusinessException("Apenas pagamentos com status APPROVED podem ser estornados")
+            throw PaymentNotApprovedForRefundException()
         }
 
+        // REGRA 2
         if (refundAmount <= BigDecimal.ZERO) {
-            throw BusinessException("O valor do estorno deve ser maior que zero")
+            throw BusinessRuleException(
+                "Refund amount must be greater than zero"
+            )
         }
 
-        if (refundAmount > amount.value) {
-            throw BusinessException("O valor do estorno não pode ser maior que o valor do pagamento")
+        // REGRA 3
+        if (refundAmount > amount.amount) {
+            throw RefundAmountGreaterThanPaymentException()
         }
     }
 
-    fun markAsRefunded() {
-        this.status = PaymentStatus.REFUNDED
+    fun markAsRefunded(): Payment {
+        if (status != PaymentStatus.APPROVED) {
+            throw BusinessRuleException(
+                "Payment $id cannot be refunded because status is $status"
+            )
+        }
+
+        return copy(status = PaymentStatus.REFUNDED)
     }
 }
