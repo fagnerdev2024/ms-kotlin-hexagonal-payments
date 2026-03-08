@@ -17,18 +17,41 @@ class ClientController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody @Valid req: CreateClientRequest): ClientResponse {
-        val created = createClientUseCase.create(req.name, req.document)
+        val created = createClientUseCase.create(
+            name = req.name,
+            document = req.document,
+            email = req.email,
+            phone = req.phone,
+            birthDate = req.birthDate
+        )
 
         return ClientResponse(
             id = created.id,
             name = created.name,
-            document = created.document
+            document = created.document,
+            email = created.email,
+            phone = created.phone,
+            birthDate = created.birthDate,
+            active = created.active,
+            createdAt = created.createdAt,
+            updatedAt = created.updatedAt
         )
     }
 
     @GetMapping("/{id}")
     fun find(@PathVariable id: UUID): ClientResponse {
         val client = createClientUseCase.findById(id)
-        return ClientResponse(id = client.id, name = client.name, document = client.document)
+
+        return ClientResponse(
+            id = client.id,
+            name = client.name,
+            document = client.document,
+            email = client.email,
+            phone = client.phone,
+            birthDate = client.birthDate,
+            active = client.active,
+            createdAt = client.createdAt,
+            updatedAt = client.updatedAt
+        )
     }
 }
