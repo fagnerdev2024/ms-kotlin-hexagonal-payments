@@ -17,13 +17,13 @@ object PaymentMapper {
         declineReason = domain.declineReason
     )
 
-    fun toDomain(entity: PaymentEntity) = Payment(
-        id = entity.id,
-        clientId = entity.clientId,
-        amount = Money(entity.amount, entity.currency),
-        status = entity.status,
-        createdAt = entity.createdAt,
-        authorizationCode = entity.authorizationCode,
-        declineReason = entity.declineReason
+    fun toDomain(paymentEntity: PaymentEntity) = Payment(
+        id = paymentEntity.id,
+        clientId = paymentEntity.clientId,
+        amount = Money(paymentEntity.amount, paymentEntity.currency),
+        status = paymentEntity.status,
+        createdAt = paymentEntity.createdAt,
+        authorizationCode = paymentEntity.authorizationCode,
+        declineReason = paymentEntity.declineReason
     )
 }

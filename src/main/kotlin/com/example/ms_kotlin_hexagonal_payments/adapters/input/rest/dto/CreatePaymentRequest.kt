@@ -9,7 +9,12 @@ import java.math.BigDecimal
 import java.util.UUID
 
 data class CreatePaymentRequest(
-    @field:NotNull val clientId: UUID,
-    @field:NotNull @field:DecimalMin("0.00") val amount: BigDecimal,
-    @field:NotBlank val currency: String = "BRL"
+    @field:NotNull
+    val clientId: UUID,
+
+    @field:NotNull @field:DecimalMin("0.00")
+    val amount: BigDecimal,
+
+    @field:NotBlank
+    val currency: String = "BRL"
 )

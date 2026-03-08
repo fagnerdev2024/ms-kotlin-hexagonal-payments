@@ -18,8 +18,8 @@ class RefundPaymentController(
 
     @PostMapping("/{paymentId}/refunds")
     @ResponseStatus(HttpStatus.CREATED)
-    fun refund(@PathVariable paymentId: UUID, @Valid @RequestBody request: RefundPaymentRequest): RefundPaymentResponse {
-        val result = refundPaymentUseCase.execute(RefundPaymentCommand(paymentId = paymentId, amount = request.amount, reason = request.reason))
+    fun refund(@PathVariable paymentId: UUID, @Valid @RequestBody refundPaymentRequest: RefundPaymentRequest): RefundPaymentResponse {
+        val result = refundPaymentUseCase.execute(RefundPaymentCommand(paymentId = paymentId, amount = refundPaymentRequest.amount, reason = refundPaymentRequest.reason))
         return RefundPaymentResponse(refundId = result.refundId, paymentId = result.paymentId, status = result.status, refundedAmount = result.refundedAmount, reason = result.reason)
     }
 }

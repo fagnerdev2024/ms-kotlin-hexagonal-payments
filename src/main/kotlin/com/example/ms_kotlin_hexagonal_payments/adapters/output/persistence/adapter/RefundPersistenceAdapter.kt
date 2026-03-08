@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class RefundPersistenceAdapter(
-    private val repository: SpringDataRefundRepository
+    private val springDataRefundRepository: SpringDataRefundRepository
 ) : SaveRefundPort {
 
     override fun save(refund: Refund): Refund {
-        val entity = RefundPersistenceMapper.toEntity(refund)
-        return RefundPersistenceMapper.toDomain(repository.save(entity))
+        val refundEntity = RefundPersistenceMapper.toEntity(refund)
+        return RefundPersistenceMapper.toDomain(springDataRefundRepository.save(refundEntity))
     }
 }

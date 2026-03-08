@@ -16,13 +16,13 @@ class ClientController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody @Valid req: CreateClientRequest): ClientResponse {
+    fun create(@RequestBody @Valid createClientRequest: CreateClientRequest): ClientResponse {
         val created = createClientUseCase.create(
-            name = req.name,
-            document = req.document,
-            email = req.email,
-            phone = req.phone,
-            birthDate = req.birthDate
+            name = createClientRequest.name,
+            document = createClientRequest.document,
+            email = createClientRequest.email,
+            phone = createClientRequest.phone,
+            birthDate = createClientRequest.birthDate
         )
 
         return ClientResponse(

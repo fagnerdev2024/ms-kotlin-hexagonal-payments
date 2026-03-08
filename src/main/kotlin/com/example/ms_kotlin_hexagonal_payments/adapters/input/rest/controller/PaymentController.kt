@@ -24,8 +24,8 @@ class PaymentController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody @Valid req: CreatePaymentRequest): PaymentResponse {
-        val payment = createPaymentUseCase.create(req.clientId, req.amount, req.currency)
+    fun create(@RequestBody @Valid createPaymentRequest: CreatePaymentRequest): PaymentResponse {
+        val payment = createPaymentUseCase.create(createPaymentRequest.clientId, createPaymentRequest.amount, createPaymentRequest.currency)
         return PaymentResponse(
             id = payment.id,
             clientId = payment.clientId,

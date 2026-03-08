@@ -20,17 +20,17 @@ object ClientMapper {
         )
     }
 
-    fun toDomain(entity: ClientEntity): Client {
+    fun toDomain(clientEntity: ClientEntity): Client {
         return Client(
-            id = entity.id,
-            name = entity.name,
-            document = entity.document,
-            email = entity.email,
-            phone = entity.phone,
-            birthDate = entity.birthDate,
-            active = entity.active,
-            createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt
+            id = clientEntity.id,
+            name = clientEntity.name,
+            document = clientEntity.document,
+            email = clientEntity.email,
+            phone = clientEntity.phone,
+            birthDate = clientEntity.birthDate,
+            active = clientEntity.active,
+            createdAt = clientEntity.createdAt,
+            updatedAt = clientEntity.updatedAt
         )
     }
 }

@@ -10,15 +10,12 @@ import java.util.UUID
 
 @Component
 class ClientPersistenceAdapter(
-    private val repo: SpringDataClientRepository
+    private val springDataClientRepository: SpringDataClientRepository
 ) : ClientRepositoryPort {
 
-    override fun save(client: Client): Client =
-        ClientMapper.toDomain(repo.save(ClientMapper.toEntity(client)))
+    override fun save(client: Client): Client = ClientMapper.toDomain(springDataClientRepository.save(ClientMapper.toEntity(client)))
 
-    override fun findById(id: UUID): Client? =
-        repo.findById(id).map { ClientMapper.toDomain(it) }.orElse(null)
+    override fun findById(id: UUID): Client? = springDataClientRepository.findById(id).map { ClientMapper.toDomain(it) }.orElse(null)
 
-    override fun existsByDocument(document: String): Boolean =
-        repo.existsByDocument(document)
+    override fun existsByDocument(document: String): Boolean = springDataClientRepository.existsByDocument(document)
 }

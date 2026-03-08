@@ -6,13 +6,7 @@ import java.util.UUID
 
 interface CreateClientUseCase {
 
-    fun create(
-        name: String,
-        document: String,
-        email: String,
-        phone: String,
-        birthDate: LocalDate
-    ): Client
+    fun create(name: String, document: String, email: String, phone: String, birthDate: LocalDate): Client
 
     fun findById(id: UUID): Client
 }
