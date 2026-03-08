@@ -3,6 +3,7 @@ package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.controller
 
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.AuthorizePaymentResponse
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.CreatePaymentRequest
+import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.PaymentListResponse
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.PaymentResponse
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.AuthorizePaymentUseCase
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.CreatePaymentUseCase
@@ -62,16 +63,22 @@ class PaymentController(
     }
 
     @GetMapping
-    fun list(@RequestParam(required = false) clientId: UUID?): List<PaymentResponse> {
-        return listPaymentsUseCase.list(clientId).map {
-            payment -> PaymentResponse(
-                id = payment.id,
-                clientId = payment.clientId,
-                amount = payment.amount.amount,
-                currency = payment.amount.currency,
-                status = payment.status,
-                createdAt = payment.createdAt
+    fun list(@RequestParam(required = false) clientId: UUID?): PaymentListResponse {
+        val payments = listPaymentsUseCase.list(clientId)
+        val items = payments.map {
+            PaymentResponse(
+                id = it.id,
+                clientId = it.clientId,
+                amount = it.amount.amount,
+                currency = it.amount.currency,
+                status = it.status,
+                createdAt = it.createdAt
             )
         }
+
+        return PaymentListResponse(
+            items = items,
+            total = items.size
+        )
     }
 }
