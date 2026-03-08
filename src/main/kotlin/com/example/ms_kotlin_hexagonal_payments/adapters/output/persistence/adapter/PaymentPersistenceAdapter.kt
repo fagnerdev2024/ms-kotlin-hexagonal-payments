@@ -11,17 +11,25 @@ import java.util.UUID
 
 @Component
 class PaymentPersistenceAdapter(
-    private val repository: SpringDataPaymentRepository
+    private val springDataPaymentRepository: SpringDataPaymentRepository
 ) : LoadPaymentPort, SavePaymentPort, PaymentRepositoryPort {
 
     override fun findById(paymentId: UUID): Payment? {
-        return repository.findById(paymentId)
+        return springDataPaymentRepository.findById(paymentId)
             .map(PaymentMapper::toDomain)
             .orElse(null)
     }
 
     override fun save(payment: Payment): Payment {
         val entity = PaymentMapper.toEntity(payment)
-        return PaymentMapper.toDomain(repository.save(entity))
+        return PaymentMapper.toDomain(springDataPaymentRepository.save(entity))
+    }
+
+    override fun findAll(): List<Payment> {
+        return springDataPaymentRepository.findAll().map(PaymentMapper::toDomain)
+    }
+
+    override fun findByClientId(clientId: UUID): List<Payment> {
+        return springDataPaymentRepository.findByClientId(clientId).map(PaymentMapper::toDomain)
     }
 }

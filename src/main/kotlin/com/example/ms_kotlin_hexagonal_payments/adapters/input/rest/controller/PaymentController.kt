@@ -7,6 +7,7 @@ import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.PaymentR
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.AuthorizePaymentUseCase
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.CreatePaymentUseCase
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.FindPaymentUseCase
+import com.example.ms_kotlin_hexagonal_payments.application.port.input.ListPaymentsUseCase
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -17,7 +18,8 @@ import java.util.UUID
 class PaymentController(
     private val createPaymentUseCase: CreatePaymentUseCase,
     private val authorizePaymentUseCase: AuthorizePaymentUseCase,
-    private val findPaymentUseCase: FindPaymentUseCase
+    private val findPaymentUseCase: FindPaymentUseCase,
+    private val listPaymentsUseCase: ListPaymentsUseCase
 ) {
 
     @PostMapping
@@ -57,5 +59,19 @@ class PaymentController(
             status = payment.status,
             createdAt = payment.createdAt
         )
+    }
+
+    @GetMapping
+    fun list(@RequestParam(required = false) clientId: UUID?): List<PaymentResponse> {
+        return listPaymentsUseCase.list(clientId).map {
+            payment -> PaymentResponse(
+                id = payment.id,
+                clientId = payment.clientId,
+                amount = payment.amount.amount,
+                currency = payment.amount.currency,
+                status = payment.status,
+                createdAt = payment.createdAt
+            )
+        }
     }
 }

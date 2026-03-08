@@ -9,4 +9,8 @@ interface PaymentRepositoryPort {
     fun save(payment: Payment): Payment
 
     fun findById(id: UUID): Payment?
+
+    fun findAll(): List<Payment>
+
+    fun findByClientId(clientId: UUID): List<Payment>
 }
