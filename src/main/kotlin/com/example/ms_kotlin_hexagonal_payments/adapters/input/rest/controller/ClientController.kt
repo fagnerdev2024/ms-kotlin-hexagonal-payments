@@ -2,6 +2,7 @@ package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.controller
 
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.ClientResponse
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.CreateClientRequest
+import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.UpdateClientRequest
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.CreateClientUseCase
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -52,6 +53,31 @@ class ClientController(
             active = client.active,
             createdAt = client.createdAt,
             updatedAt = client.updatedAt
+        )
+    }
+
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: UUID, @RequestBody @Valid updateClientRequest: UpdateClientRequest): ClientResponse {
+        val updated = createClientUseCase.update(
+            id = id,
+            name = updateClientRequest.name,
+            email = updateClientRequest.email,
+            phone = updateClientRequest.phone,
+            birthDate = updateClientRequest.birthDate,
+            active = updateClientRequest.active
+        )
+
+        return ClientResponse(
+            id = updated.id,
+            name = updated.name,
+            document = updated.document,
+            email = updated.email,
+            phone = updated.phone,
+            birthDate = updated.birthDate,
+            active = updated.active,
+            createdAt = updated.createdAt,
+            updatedAt = updated.updatedAt
         )
     }
 }

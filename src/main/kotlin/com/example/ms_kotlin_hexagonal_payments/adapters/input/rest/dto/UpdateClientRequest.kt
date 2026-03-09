@@ -1,3 +1,27 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto
 
-data class UpdateClientRequest()
+
+
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Past
+import java.time.LocalDate
+
+
+data class UpdateClientRequest(
+
+    @field:NotBlank(message = "name is required")
+    val name: String,
+
+    @field:NotBlank(message = "email is required")
+    @field:Email(message = "email must be valid")
+    val email: String,
+
+    @field:NotBlank(message = "phone is required")
+    val phone: String,
+
+    @field:Past(message = "birthDate must be in the past")
+    val birthDate: LocalDate,
+
+    val active: Boolean
+)

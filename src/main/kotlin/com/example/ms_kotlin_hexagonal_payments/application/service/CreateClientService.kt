@@ -6,6 +6,7 @@ import com.example.ms_kotlin_hexagonal_payments.domain.exception.BusinessRuleExc
 import com.example.ms_kotlin_hexagonal_payments.domain.exception.NotFoundException
 import com.example.ms_kotlin_hexagonal_payments.domain.model.Client
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -14,13 +15,7 @@ class CreateClientService(
     private val clientRepository: ClientRepositoryPort
 ) : CreateClientUseCase {
 
-    override fun create(
-        name: String,
-        document: String,
-        email: String,
-        phone: String,
-        birthDate: LocalDate
-    ): Client {
+    override fun create(name: String, document: String, email: String, phone: String, birthDate: LocalDate): Client {
         if (clientRepository.existsByDocument(document)) {
             throw BusinessRuleException("Client document already registered")
         }
@@ -39,5 +34,22 @@ class CreateClientService(
     override fun findById(id: UUID): Client {
         return clientRepository.findById(id)
             ?: throw NotFoundException("Client not found: $id")
+    }
+
+    // NOVO
+    override fun update(id: UUID, name: String, email: String, phone: String, birthDate: LocalDate, active: Boolean): Client {
+        val existingClient = clientRepository.findById(id)
+            ?: throw NotFoundException("Client not found: $id")
+
+        val updatedClient = existingClient.copy(
+            name = name,
+            email = email,
+            phone = phone,
+            birthDate = birthDate,
+            active = active,
+            updatedAt = Instant.now()
+        )
+
+        return clientRepository.save(updatedClient)
     }
 }
