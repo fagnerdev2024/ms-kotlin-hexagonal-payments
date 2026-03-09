@@ -12,11 +12,11 @@ import java.util.UUID
 
 @Service
 class CreateClientService(
-    private val clientRepository: ClientRepositoryPort
+    private val clientRepositoryPort: ClientRepositoryPort
 ) : CreateClientUseCase {
 
     override fun create(name: String, document: String, email: String, phone: String, birthDate: LocalDate): Client {
-        if (clientRepository.existsByDocument(document)) {
+        if (clientRepositoryPort.existsByDocument(document)) {
             throw BusinessRuleException("Client document already registered")
         }
 
@@ -28,17 +28,17 @@ class CreateClientService(
             birthDate = birthDate
         )
 
-        return clientRepository.save(client)
+        return clientRepositoryPort.save(client)
     }
 
     override fun findById(id: UUID): Client {
-        return clientRepository.findById(id)
+        return clientRepositoryPort.findById(id)
             ?: throw NotFoundException("Client not found: $id")
     }
 
     // NOVO
     override fun update(id: UUID, name: String, email: String, phone: String, birthDate: LocalDate, active: Boolean): Client {
-        val existingClient = clientRepository.findById(id)
+        val existingClient = clientRepositoryPort.findById(id)
             ?: throw NotFoundException("Client not found: $id")
 
         val updatedClient = existingClient.copy(
@@ -50,6 +50,10 @@ class CreateClientService(
             updatedAt = Instant.now()
         )
 
-        return clientRepository.save(updatedClient)
+        return clientRepositoryPort.save(updatedClient)
+    }
+
+    override fun findAll(): List<Client> {
+        return clientRepositoryPort.findAll()
     }
 }

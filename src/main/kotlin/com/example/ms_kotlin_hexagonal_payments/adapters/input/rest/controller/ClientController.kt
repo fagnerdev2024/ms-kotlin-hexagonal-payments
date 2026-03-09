@@ -80,4 +80,22 @@ class ClientController(
             updatedAt = updated.updatedAt
         )
     }
+
+
+    @GetMapping
+    fun findAll(): List<ClientResponse> {
+        return createClientUseCase.findAll().map {
+            client -> ClientResponse(
+                id = client.id,
+                name = client.name,
+                document = client.document,
+                email = client.email,
+                phone = client.phone,
+                birthDate = client.birthDate,
+                active = client.active,
+                createdAt = client.createdAt,
+                updatedAt = client.updatedAt
+            )
+        }
+    }
 }
