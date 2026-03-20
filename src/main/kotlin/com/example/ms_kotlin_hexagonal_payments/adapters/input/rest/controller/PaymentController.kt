@@ -9,10 +9,11 @@ import com.example.ms_kotlin_hexagonal_payments.application.port.input.Authorize
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.CreatePaymentUseCase
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.FindPaymentUseCase
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.ListPaymentsUseCase
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import java.util.UUID
+import java.util.*
 
 @RestController
 @RequestMapping("/v1/payments")
@@ -63,8 +64,13 @@ class PaymentController(
     }
 
     @GetMapping
-    fun list(@RequestParam(required = false) clientId: UUID?): PaymentListResponse {
-        val payments = listPaymentsUseCase.list(clientId)
+    fun list(@RequestParam(required = false) clientId: UUID?, @RequestParam(required = false) status: PaymentStatus?): PaymentListResponse {
+        val payments = when {
+            status != null -> listPaymentsUseCase.execute(status)
+            clientId != null -> listPaymentsUseCase.list(clientId)
+            else -> listPaymentsUseCase.execute(null)
+        }
+
         val items = payments.map {
             PaymentResponse(
                 id = it.id,

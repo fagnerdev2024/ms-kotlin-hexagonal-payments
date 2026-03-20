@@ -1,6 +1,6 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.output.persistence.entity
 
-import com.example.ms_kotlin_hexagonal_payments.domain.model.RefundStatus
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.RefundStatus
 
 
 import jakarta.persistence.*

@@ -3,7 +3,7 @@ package com.example.ms_kotlin_hexagonal_payments.adapters.output.gateway
 import com.example.ms_kotlin_hexagonal_payments.application.port.output.PaymentAuthorizationPort
 import com.example.ms_kotlin_hexagonal_payments.domain.model.AuthorizationResult
 import com.example.ms_kotlin_hexagonal_payments.domain.model.Payment
-import com.example.ms_kotlin_hexagonal_payments.domain.model.PaymentStatus
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import org.springframework.stereotype.Component
 import java.util.UUID
 

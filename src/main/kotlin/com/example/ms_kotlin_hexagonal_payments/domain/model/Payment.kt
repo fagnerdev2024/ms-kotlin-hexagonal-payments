@@ -3,6 +3,7 @@ package com.example.ms_kotlin_hexagonal_payments.domain.model
 import com.example.ms_kotlin_hexagonal_payments.domain.exception.BusinessRuleException
 import com.example.ms_kotlin_hexagonal_payments.domain.exception.PaymentNotApprovedForRefundException
 import com.example.ms_kotlin_hexagonal_payments.domain.exception.RefundAmountGreaterThanPaymentException
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID

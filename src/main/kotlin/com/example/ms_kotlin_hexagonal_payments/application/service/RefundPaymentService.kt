@@ -11,7 +11,7 @@ import com.example.ms_kotlin_hexagonal_payments.application.port.output.SavePaym
 import com.example.ms_kotlin_hexagonal_payments.application.port.output.SaveRefundPort
 import com.example.ms_kotlin_hexagonal_payments.domain.exception.BusinessException
 import com.example.ms_kotlin_hexagonal_payments.domain.model.Refund
-import com.example.ms_kotlin_hexagonal_payments.domain.model.RefundStatus
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.RefundStatus
 import org.springframework.stereotype.Service
 import java.util.UUID
 

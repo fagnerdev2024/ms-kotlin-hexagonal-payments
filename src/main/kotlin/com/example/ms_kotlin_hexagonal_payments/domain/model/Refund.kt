@@ -2,6 +2,7 @@ package com.example.ms_kotlin_hexagonal_payments.domain.model
 
 
 
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.RefundStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID

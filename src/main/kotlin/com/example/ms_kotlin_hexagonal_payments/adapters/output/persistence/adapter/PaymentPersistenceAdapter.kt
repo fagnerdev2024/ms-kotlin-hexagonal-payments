@@ -6,6 +6,7 @@ import com.example.ms_kotlin_hexagonal_payments.application.port.output.LoadPaym
 import com.example.ms_kotlin_hexagonal_payments.application.port.output.PaymentRepositoryPort
 import com.example.ms_kotlin_hexagonal_payments.application.port.output.SavePaymentPort
 import com.example.ms_kotlin_hexagonal_payments.domain.model.Payment
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import org.springframework.stereotype.Component
 import java.util.UUID
 
@@ -31,5 +32,11 @@ class PaymentPersistenceAdapter(
 
     override fun findByClientId(clientId: UUID): List<Payment> {
         return springDataPaymentRepository.findByClientId(clientId).map(PaymentMapper::toDomain)
+    }
+
+
+    override fun findByStatus(status: PaymentStatus): List<Payment> {
+        return springDataPaymentRepository.findByStatus(status)
+            .map(PaymentMapper::toDomain)
     }
 }

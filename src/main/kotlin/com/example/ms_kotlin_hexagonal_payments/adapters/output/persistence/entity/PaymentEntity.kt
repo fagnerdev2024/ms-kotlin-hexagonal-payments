@@ -1,7 +1,7 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.output.persistence.entity
 
 
-import com.example.ms_kotlin_hexagonal_payments.domain.model.PaymentStatus
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.Instant

@@ -1,6 +1,6 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto
 
-import com.example.ms_kotlin_hexagonal_payments.domain.model.PaymentStatus
+import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID
