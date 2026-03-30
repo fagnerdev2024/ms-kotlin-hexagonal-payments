@@ -1,7 +1,5 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto
 
-
-
 import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID

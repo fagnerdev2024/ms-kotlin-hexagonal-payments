@@ -1,7 +1,5 @@
 package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto
 
-
-
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Past
