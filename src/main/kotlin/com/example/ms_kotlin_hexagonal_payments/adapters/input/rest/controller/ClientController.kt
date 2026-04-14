@@ -3,8 +3,10 @@ package com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.controller
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.ClientResponse
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.CreateClientRequest
 import com.example.ms_kotlin_hexagonal_payments.adapters.input.rest.dto.UpdateClientRequest
-import com.example.ms_kotlin_hexagonal_payments.application.port.input.CreateClientUseCase
+import com.example.ms_kotlin_hexagonal_payments.application.port.input.ClientUseCase
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -12,13 +14,13 @@ import java.util.UUID
 @RestController
 @RequestMapping("/v1/clients")
 class ClientController(
-    private val createClientUseCase: CreateClientUseCase
+    private val clientUseCase: ClientUseCase
 ) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody @Valid createClientRequest: CreateClientRequest): ClientResponse {
-        val created = createClientUseCase.create(
+        val created = clientUseCase.create(
             name = createClientRequest.name,
             document = createClientRequest.document,
             email = createClientRequest.email,
@@ -26,23 +28,38 @@ class ClientController(
             birthDate = createClientRequest.birthDate
         )
 
-        return ClientResponse(
-            id = created.id,
-            name = created.name,
-            document = created.document,
-            email = created.email,
-            phone = created.phone,
-            birthDate = created.birthDate,
-            active = created.active,
-            createdAt = created.createdAt,
-            updatedAt = created.updatedAt
-        )
+        return toClientResponse(created)
     }
 
     @GetMapping("/{id}")
     fun find(@PathVariable id: UUID): ClientResponse {
-        val client = createClientUseCase.findById(id)
+        val client = clientUseCase.findById(id)
 
+        return toClientResponse(client)
+    }
+
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: UUID, @RequestBody @Valid updateClientRequest: UpdateClientRequest): ClientResponse {
+        val updated = clientUseCase.update(
+            id = id,
+            name = updateClientRequest.name,
+            email = updateClientRequest.email,
+            phone = updateClientRequest.phone,
+            birthDate = updateClientRequest.birthDate,
+            active = updateClientRequest.active
+        )
+
+        return toClientResponse(updated)
+    }
+
+
+    @GetMapping
+    fun findAll(pageable: Pageable): Page<ClientResponse> {
+        return clientUseCase.findAll(pageable).map { client -> toClientResponse(client) }
+    }
+
+    private fun toClientResponse(client: com.example.ms_kotlin_hexagonal_payments.domain.model.Client): ClientResponse {
         return ClientResponse(
             id = client.id,
             name = client.name,
@@ -54,48 +71,5 @@ class ClientController(
             createdAt = client.createdAt,
             updatedAt = client.updatedAt
         )
-    }
-
-
-    @PutMapping("/{id}")
-    fun update(@PathVariable id: UUID, @RequestBody @Valid updateClientRequest: UpdateClientRequest): ClientResponse {
-        val updated = createClientUseCase.update(
-            id = id,
-            name = updateClientRequest.name,
-            email = updateClientRequest.email,
-            phone = updateClientRequest.phone,
-            birthDate = updateClientRequest.birthDate,
-            active = updateClientRequest.active
-        )
-
-        return ClientResponse(
-            id = updated.id,
-            name = updated.name,
-            document = updated.document,
-            email = updated.email,
-            phone = updated.phone,
-            birthDate = updated.birthDate,
-            active = updated.active,
-            createdAt = updated.createdAt,
-            updatedAt = updated.updatedAt
-        )
-    }
-
-
-    @GetMapping
-    fun findAll(): List<ClientResponse> {
-        return createClientUseCase.findAll().map {
-            client -> ClientResponse(
-                id = client.id,
-                name = client.name,
-                document = client.document,
-                email = client.email,
-                phone = client.phone,
-                birthDate = client.birthDate,
-                active = client.active,
-                createdAt = client.createdAt,
-                updatedAt = client.updatedAt
-            )
-        }
     }
 }

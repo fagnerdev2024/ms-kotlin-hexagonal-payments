@@ -11,6 +11,8 @@ import com.example.ms_kotlin_hexagonal_payments.application.port.input.FindPayme
 import com.example.ms_kotlin_hexagonal_payments.application.port.input.ListPaymentsUseCase
 import com.example.ms_kotlin_hexagonal_payments.domain.model.enuns.PaymentStatus
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -64,14 +66,14 @@ class PaymentController(
     }
 
     @GetMapping
-    fun list(@RequestParam(required = false) clientId: UUID?, @RequestParam(required = false) status: PaymentStatus?): PaymentListResponse {
+    fun list(@RequestParam(required = false) clientId: UUID?, @RequestParam(required = false) status: PaymentStatus?, pageable: Pageable): Page<PaymentResponse> {
         val payments = when {
-            status != null -> listPaymentsUseCase.execute(status)
-            clientId != null -> listPaymentsUseCase.list(clientId)
-            else -> listPaymentsUseCase.execute(null)
+            status != null -> listPaymentsUseCase.listByStatus(status, pageable)
+            clientId != null -> listPaymentsUseCase.list(clientId, pageable)
+            else -> listPaymentsUseCase.listByStatus(null, pageable)
         }
 
-        val items = payments.map {
+        return payments.map {
             PaymentResponse(
                 id = it.id,
                 clientId = it.clientId,
@@ -81,10 +83,5 @@ class PaymentController(
                 createdAt = it.createdAt
             )
         }
-
-        return PaymentListResponse(
-            items = items,
-            total = items.size
-        )
     }
 }

@@ -4,6 +4,8 @@ import com.example.ms_kotlin_hexagonal_payments.adapters.output.persistence.mapp
 import com.example.ms_kotlin_hexagonal_payments.adapters.output.persistence.repository.SpringDataClientRepository
 import com.example.ms_kotlin_hexagonal_payments.application.port.output.ClientRepositoryPort
 import com.example.ms_kotlin_hexagonal_payments.domain.model.Client
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import java.util.UUID
 
@@ -30,7 +32,7 @@ class ClientPersistenceAdapter(
     }
 
 
-    override fun findAll(): List<Client> {
-        return springDataClientRepository.findAll().map(ClientMapper::toDomain)
+    override fun findAll(pageable: Pageable): Page<Client> {
+        return springDataClientRepository.findAll(pageable).map(ClientMapper::toDomain)
     }
 }
